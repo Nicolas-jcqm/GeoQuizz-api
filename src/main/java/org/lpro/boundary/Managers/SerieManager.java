@@ -40,5 +40,9 @@ public class SerieManager {
     public Serie findById(String id) {
         return this.em.find(Serie.class, id);
     }
+    
+    public Serie save(Serie s) {
+        return this.em.merge(s);
+    }
   
 }

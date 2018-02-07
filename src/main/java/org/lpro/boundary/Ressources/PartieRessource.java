@@ -5,11 +5,11 @@
  */
 package org.lpro.boundary.Ressources;
 
-import java.net.URI;
-import java.security.SecureRandom;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonObject;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
@@ -40,6 +40,7 @@ public class PartieRessource {
     
     @Inject 
     PartieManager pm;
+
     
     @GET
     public Response getParties() {
@@ -47,24 +48,36 @@ public class PartieRessource {
         return Response.ok(liste).build();
     }
     
-    @POST
+    @GET
     @Path("{idSerie}")
     public Response newPartie(
-            @PathParam("idSerie") String idSerie, @Context UriInfo uriInfo,
-            @DefaultValue("10") @QueryParam("diffImage") int diffImage){
-        /** 
-        Partie p = new Partie(id, token, diffImage, false, 0, idJoueur, idSerie);
-        Partie newOne = this.pm.save(p);
-        URI uri = uriInfo.getAbsolutePathBuilder().path("/"+id).build();
-        return Response.created(uri).build(); */
-        Partie p = new Partie();
-        Partie newOne = this.pm.save(p);
-        URI uri = uriInfo.getAbsolutePathBuilder().path("/"+p.getId()).build();
-        return Response.created(uri).build();
-        
+        @PathParam("idSerie") String idSerie, @Context UriInfo uriInfo,
+        @DefaultValue("10") @QueryParam("photo") int photo,
+        @DefaultValue("JoueurInconnu") @QueryParam("joueur") String joueur){
+            Partie tok = pm.createPartie(idSerie, photo, joueur);
+            
+         JsonObject ob = Json.createObjectBuilder()
+                 .add("id", tok.getId())
+                 .add("token", tok.getToken())
+                 .add("nbPhotos", tok.getNbPhotos())
+                 .add("status", tok.getStatus())
+                 .add("score", tok.getScore())
+                 .add("joueur", tok.getJoueur())
+                 .add("serie", tok.getSerie()).build();
+         return Response.ok(ob).build();
     }
     
-    
-    
-    
+    /**
+    @POST
+    public Response newPartieFalse(JsonObject jso, @Context UriInfo uriInfo){
+            String serie = jso.getJsonObject("data").getString("serie");
+            int nbPhotos = Integer.parseInt(jso.getJsonObject("data").getString("photo"));
+            String idJoueur = jso.getJsonObject("data").getString("joueur");
+            pm.createPartie(serie, nbPhotos, idJoueur);
+            return Response.ok().build();
+    } */
 }
+/**
+{"data":
+    {"serie":"1","photo":"10","joueur":"1"}}
+    * */
