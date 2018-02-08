@@ -144,7 +144,7 @@ public class PartieRessource {
         @ApiResponse(code = 201, message = "Creer"),
         @ApiResponse(code = 417, message = "Expectation failed"),
         @ApiResponse(code = 500, message = "Erreur Serveur")})
-    public Response scorePartie(JsonObject score, @QueryParam("token") String token, @HeaderParam("X-geoquizz-token") String header, @Context UriInfo uriInfo) throws java.text.ParseException {
+    public Response scorePartie(JsonObject , @QueryParam("token") String token, @HeaderParam("X-geoquizz-token") String header, @Context UriInfo uriInfo) throws java.text.ParseException {
         
         if (header == null && token == null ) {
             return Response.status(Response.Status.FORBIDDEN).entity(
@@ -189,8 +189,8 @@ public class PartieRessource {
         URI uri = uriInfo.getAbsolutePathBuilder().path("/"+p.getId()).build();
         return Response.created(uri).entity(succes).build();
        
-    }
-    */
+    }*/
+    
     private JsonObject builJson(Serie s, Partie g, List<Photo> p){
 
         JsonArrayBuilder photos = Json.createArrayBuilder();
