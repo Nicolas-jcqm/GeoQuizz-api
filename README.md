@@ -3,34 +3,15 @@
 ## Authors
 Nicolas Jacquemin-Thibaud Grepin-Lucas Marquan-Quentin Parmentier
 
-##Routes Player : path = serverIp:port/GeoQuizz/ApiPlayer/
- 
--@GET
- - path/series --> liste des series disponibles
- 
--@POST
- - path/partie/{idserie}?params --> création de la partie
- 
- @GET
- - path/partie/{id} --> récupération d'une partie en cours
-
-##Routes BackOffice : path= serverIp:port/GeoQuizz/BackOffice
-
-//Gerer les users
-
-@GET
- - path/user/{id}
- 
-@POST
- - path/user --> Permet de créer un user (admin)
- 
-@POST
- - path/user/login --> Permet de login un user
- 
-@DELETE
- - path/user/{id} --> Permet de deconnecter un user
- 
- //Gerer les series
- 
-@POST
- - path/series --> Permet de créer un serie
+##Routes Player : path = serverIp:port/geoquizzapi/api
+ Parties:
+			GET: /parties : retourne toutes les parties
+			POST: /parties :crée une partie demande un Json contenant : « idSerie » « joueur » « nbPhotos » « id » « token » « status » « score » 
+			PUT: /parties modifie le score de la partie :  -token : String
+										          - Json score : « score »
+Series: 
+			GET: /series : retourne toutes les series
+			GET:/series/{id}/parties: retourne toutes les parties d’une série 
+			GET:/series/{id} : retourne la série
+			GET: /series/{id}/photos: récupère aléatoirement un nombre de photos pour la partie : param: « photo »  
+			POST:/series/{id}/parties crée une partie pour la série 
