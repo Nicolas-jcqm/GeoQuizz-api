@@ -69,13 +69,15 @@ public class SerieManager {
         }
         return res;
     }
-*/
+*/ 
     public List<Photo> randomPhotos(Serie s, int nbPhotos){
         ArrayList<Photo> photosRes = new ArrayList<>();
-        ArrayList<Photo> photos = new ArrayList<>();
-        Collections.shuffle(photos);
+        Set<Photo> photos = s.getListePhotos();
+        ArrayList<Photo> lol = new ArrayList<Photo>();
+        lol.addAll(photos);
+        Collections.shuffle(lol);
         for(int i=0; i<nbPhotos; i++){
-            photosRes.add(photos.get(i));
+            photosRes.add( lol.get(i));
         }
         return photosRes;
     }

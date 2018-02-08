@@ -113,10 +113,20 @@ public class SerieRessource {
     @Path("{id}")
     public Response getOneSerie(
         @PathParam("id") String id, @Context UriInfo uriInfo ){
-        return Optional.ofNullable(sm.findById(id))
-                .map(c -> Response.ok(c).build())
-                .orElse(Response.status(Response.Status.NOT_FOUND).build());
+        Serie s=sm.findById(id);
+         return Response.ok(serieToJson(s)).build();
     }   
+    private JsonObject serieToJson(Serie s){
+         return Json.createObjectBuilder()
+                .add("nom",s.getNom())
+                .add("id",s.getId())
+                 .add("latitude",s.getLatitude())
+                 .add("longitude",s.getLongitude())
+                 .add("distance",s.getDistance())
+                 .add("ville",s.getVille())
+                 .add("zoom",s.getZoom())
+                 .build();
+    }
     
     @GET
     @Path("{idSerie}/parties")

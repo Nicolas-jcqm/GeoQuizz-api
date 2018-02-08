@@ -13,8 +13,7 @@ import javax.ws.rs.core.Application;
  */
 @ApplicationPath("api")
 public class JAXRSConfiguration extends Application {
-    /** 
-    @Override
+    /**    @Override
     public Set<Class<?>> getClasses(){
         Set<Class<?>> classes = new HashSet<>();
         classes.add(org.lpro.provider.CORSResponseFilter.class);
