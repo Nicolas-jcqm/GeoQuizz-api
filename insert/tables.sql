@@ -7,6 +7,7 @@ CREATE Table utilisateur(
 
 CREATE Table serie(
 	id 				VARCHAR(50) PRIMARY KEY UNIQUE NOT NULL,
+	nom				VARCHAR(100) NOT NULL,
 	ville 			VARCHAR(100) NOT NULL,
 	map_latitude 	DOUBLE PRECISION NOT NULL,
 	map_longitude 	DOUBLE PRECISION NOT NULL,
@@ -20,8 +21,10 @@ CREATE Table partie(
 	nb_photos 	INTEGER NOT NULL,
 	status 		BOOLEAN NOT NULL, 
 	score 		INTEGER NOT NULL,
-	idJoueur 	VARCHAR(100) REFERENCES utilisateur, 
-	idSerie 	VARCHAR(100) NOT NULL REFERENCES serie
+	idJoueur 	VARCHAR(100),
+	idSerie 	VARCHAR(100) NOT NULL,
+	CONSTRAINT joueur_fk FOREIGN KEY(idJoueur) REFERENCES Utilisateur(id),
+	CONSTRAINT serie_fk FOREIGN KEY(idSerie) REFERENCES Serie(id)
 );
 	
 CREATE Table photo(
@@ -30,6 +33,7 @@ CREATE Table photo(
 	position_latitude 	DOUBLE PRECISION NOT NULL,
 	position_longitude 	DOUBLE PRECISION NOT NULL,
 	url 				VARCHAR(100) NOT NULL,
-	idSerie 			VARCHAR(50) REFERENCES serie
+	idSerie 			VARCHAR(50),
+	CONSTRAINT serie2_fk FOREIGN KEY(idSerie) REFERENCES Serie(id)
 );
 

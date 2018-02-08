@@ -6,9 +6,13 @@
 package org.lpro.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,10 +31,16 @@ public class Photo implements Serializable {
     @Id
     private String id;
     private String descr;
+    @NotNull
     private double position_latitude;
+    @NotNull
     private double position_longitude;
+    @NotNull
     private String url;
     private String idSerie;
+    
+    @ManyToMany(mappedBy = "listePhotos")
+    private Set<Serie> listeSerie = new HashSet<Serie>();
     
     public Photo(){
         
@@ -92,4 +102,13 @@ public class Photo implements Serializable {
     public void setSerie(String i) {
         this.idSerie = i;
     }
+    
+    public Set<Serie> getListeSeries() {
+        return listeSerie;
+    }
+
+    public void setListeSeries(Set<Serie> s) {
+        this.listeSerie = s;
+    }
+    
 }
