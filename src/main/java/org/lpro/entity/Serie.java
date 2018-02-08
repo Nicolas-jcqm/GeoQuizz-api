@@ -7,11 +7,14 @@ package org.lpro.entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -45,7 +48,8 @@ public class Serie implements Serializable{
     
     @ManyToMany
     private Set<Photo> listePhotos = new HashSet<Photo>();
-    
+
+            
     public Serie(){
         
     }
@@ -121,5 +125,6 @@ public class Serie implements Serializable{
     public void setListePhotos(Set<Photo>p) {
         this.listePhotos = p;
     }
+
     
 }

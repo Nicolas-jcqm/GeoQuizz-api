@@ -83,11 +83,16 @@ public class SerieRessource {
     @Path("{id}/parties")
     public Response getParties(@PathParam("id") String id,@Context UriInfo uriInfo) {
             Serie serie=this.sm.findById(id);
-            if(serie==null){
-                return Response.status(Response.Status.NOT_FOUND).entity(Json.createObjectBuilder().add("error","mauvaise idSerie")).build();
+            System.out.println(serie);
+            if(serie!=null){
+                System.out.println("ok");
+              List<Partie> partie = this.pm.findBySerieId(serie);
+             return Response.ok(toJsonPartie(serie,partie)).build();
+            }else{
+                 System.out.println("erreur");
+                 return Response.status(Response.Status.NOT_FOUND).entity(Json.createObjectBuilder().add("error","mauvais idSerie")).build();
             }
-             List<Partie> partie=this.pm.findBySerieId(serie);
-             return Response.status(Response.Status.OK).entity(toJsonPartie(serie,partie)).build();
+             
     }       
    private JsonObject toJsonPartie(Serie s, List<Partie> p){
         JsonArrayBuilder parties = Json.createArrayBuilder();
@@ -96,7 +101,7 @@ public class SerieRessource {
                     .add("id", partie.getId())
                     .add("idJoueur", partie.getJoueur())
                     .add("score", partie.getScore())
-                    .add("nbPhotos", this.pm.findById(partie.getId()).getNbPhotos())
+                    .add("nbPhotos", partie.getNbPhotos())
                     .build();
 
             parties.add(gam);
@@ -127,26 +132,6 @@ public class SerieRessource {
                  .add("zoom",s.getZoom())
                  .build();
     }
-    
-    @GET
-    @Path("{idSerie}/parties")
-    public Response newPartie(
-        @PathParam("idSerie") String idSerie, @Context UriInfo uriInfo,
-        @DefaultValue("10") @QueryParam("photo") int photo,
-        @DefaultValue("JoueurInconnu") @QueryParam("joueur") String joueur){
-            Partie tok = pm.createPartie(idSerie, photo, joueur);
-            
-         JsonObject ob = Json.createObjectBuilder()
-                 .add("id", tok.getId())
-                 .add("token", tok.getToken())
-                 .add("nbPhotos", tok.getNbPhotos())
-                 .add("status", tok.getStatus())
-                 .add("score", tok.getScore())
-                 .add("joueur", tok.getJoueur())
-                 .add("serie", tok.getSerie()).build();
-         return Response.ok(ob).build();
-    }
-    
     @GET
     @Path("{idSerie}/photos")
     public Response getPhotosPartie (

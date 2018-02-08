@@ -7,7 +7,10 @@ package org.lpro.entity;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -33,18 +36,20 @@ public class Partie implements Serializable {
     private String idJoueur;
     private String idSerie;
     
+    
     public Partie(){
         
     }
     
-    public Partie(String i, String t, int nb, boolean s, int sc, String j, String ser){
+    public Partie(String i, String t, int nb, boolean s, int sc, String j, String ids){
         this.id = i;
         this.token = t;
         this.nb_photos = nb;
         this.status = s;
         this.score = sc;
         this.idJoueur = j;
-        this.idSerie = ser;
+        this.idSerie = ids;
+
     }
 
     public String getId() {

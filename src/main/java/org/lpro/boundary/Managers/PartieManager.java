@@ -37,7 +37,7 @@ public class PartieManager {
         return this.em.find(Partie.class,id);
     }
     public List<Partie> findBySerieId(Serie s){
-        String q="SELECT p FROM PARTIE p WHERE p.id='"+s.getId()+"'";
+        String q="SELECT p FROM Partie p WHERE p.idSerie='"+s.getId()+"'";
         Query query=this.em.createQuery(q);
         return query.getResultList();
     }
