@@ -8,6 +8,7 @@ package org.lpro.boundary.Ressources;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -65,8 +66,8 @@ public class PartieRessource {
     }
     
    
-    
-        @POST
+    /**
+    @POST
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "Creer"),
         @ApiResponse(code = 417, message = "Expectation failed"),
@@ -75,7 +76,7 @@ public class PartieRessource {
         JsonObjectBuilder error = Json.createObjectBuilder();
         String errorList = "";
         boolean flag = false;
-        if(!score.containsKey("idSerie")  || score.getString("idSerie").isEmpty() || score.isNull("idSerie")){
+        if(score.getString("idSerie") == null){
             errorList += "pas d'id série";
             flag = true;
         }
@@ -87,12 +88,12 @@ public class PartieRessource {
                             .build()
             ).build();
         }
-        if(!score.containsKey("idJoueur")  || score.getString("idJouer").isEmpty()|| score.isNull("idJoueur")){
+        if(score.getString("idJoueur") == null){
             errorList += "pas d'id joueur ";
             flag = true;
         }
         
-        if(!score.containsKey("nbPhotos") || score.getString("nbPhotos").isEmpty()|| score.isNull("nbPhotos") ){
+        if(score.getInt("nbPhotos") == 0 ){
             errorList += "pas de nbPhotos ";
             flag = true;
         }
@@ -101,15 +102,43 @@ public class PartieRessource {
             JsonObject json = error.build();
             return Response.status(Response.Status.EXPECTATION_FAILED).entity(json).build();
         }
-        
-        Partie partie = new Partie(score.getString("id"),score.getString("token"),score.getInt("nbPhotos"),score.getBoolean("status"),score.getInt("score"),score.getString("joueur"),score.getString("idSerie"));
-        partie = this.pm.create(partie);
-        List<Photo> photos = this.sm.randomPhotos(s,toInteger(score.getInt("nbPhotos")));
+        Partie partie = this.pm.createPartie(score.getString("idSerie"),score.getInt("nbPhotos"),score.getString("idJoueur"));
+        List<Photo> photos = this.sm.randomPhotos(s,score.getInt("nbPhotos"));
         URI uri = uriInfo.getAbsolutePathBuilder().path("/"+partie.getId()).build();
         return Response.created(uri).entity(this.builJson(s, partie, photos)).build();
        
+    }*/
+    
+    @POST
+    public Response derniereChance(
+        JsonObject partie, @Context UriInfo uriInfo){
+        int photos = partie.getInt("photo");
+        String joueur = partie.getString("joueur");
+        String serie = partie.getString("serie");
+        Partie p = this.pm.createPartie(serie, photos, joueur);
+        List<Photo> returnPhotos = this.sm.randomPhotos(this.sm.findById(serie), photos);
+        return Response.ok(listToJson(returnPhotos,p)).build();
     }
     
+    private JsonObject listToJson(List<Photo> l,Partie p){
+        JsonArrayBuilder photos=Json.createArrayBuilder();
+        JsonObject token=Json.createObjectBuilder().add("token",p.getToken()).build();
+        l.forEach((photo ->{
+            JsonObject pos = Json.createObjectBuilder()
+                    .add("url",photo.getUrl())
+                    .add("latitude",photo.getLatitude())
+                    .add("longitude",photo.getLongitude())
+                    .add("description", photo.getDescr())
+                    .build();
+        photos.add(pos);
+        }));
+        return Json.createObjectBuilder()
+                .add("type", "ressource")
+                .add("partie", token)
+                .add("photos",photos).build();
+    }
+    
+    /**
     @PUT
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "Creer"),
@@ -161,7 +190,7 @@ public class PartieRessource {
         return Response.created(uri).entity(succes).build();
        
     }
-    
+    */
     private JsonObject builJson(Serie s, Partie g, List<Photo> p){
 
         JsonArrayBuilder photos = Json.createArrayBuilder();

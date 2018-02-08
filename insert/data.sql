@@ -19,3 +19,14 @@ INSERT INTO photo (id, descr, position_latitude, position_longitude, url, idSeri
 (9, 'Musee des Beaux-Arts', 48.693630, 6.182112, 'Nancy/museeBeauxArts.jpg', 1),
 (10, 'Centre Commercial Saint Sebeastien', 48.688876, 6.181254, 'Nancy/saintSebastien.jpg', 1);
 
+INSERT INTO serie_photo (listeserie_id, listephotos_id) VALUES
+(1,1),
+(1,2),
+(1,3),
+(1,4),
+(1,5),
+(1,6),
+(1,7),
+(1,8),
+(1,9),
+(1,10);
