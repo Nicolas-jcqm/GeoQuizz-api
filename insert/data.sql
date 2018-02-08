@@ -1,8 +1,8 @@
 INSERT INTO utilisateur (id, username, mail, password) VALUES
 (1, 'MrRobot', 'loremIpsum@gmail.com', 'password');
 
-INSERT INTO serie (id, ville, map_latitude, map_longitude, map_zoom, dist) VALUES
-(1, 'Nancy', 48.66686499999999, 6.134240999999999, 10, 500);
+INSERT INTO serie (id, nom, ville, map_latitude, map_longitude, map_zoom, dist) VALUES
+(1, 'serie1', 'Nancy', 48.66686499999999, 6.134240999999999, 10, 500);
 
 INSERT INTO partie (id, token, nb_photos, status, score, idJoueur, idSerie) VALUES
 (1, 'jnfskfd466dg4dg4f', 10, true, 12, 1, 1);
