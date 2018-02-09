@@ -18,6 +18,7 @@ public class CORSRequestFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestCtx) throws IOException {
         log.log(Level.INFO, "Execution du filtre Request: {0}", requestCtx.getRequest().getMethod());
+        
         if (requestCtx.getRequest().getMethod().equals("OPTIONS")) {
             log.info("Detection HTTP Method (OPTIONS)");
             requestCtx.abortWith(Response.status(Response.Status.OK).build());
