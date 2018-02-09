@@ -2,7 +2,7 @@ CREATE Table utilisateur(
 	id			VARCHAR(50) PRIMARY KEY UNIQUE NOT NULL,
 	username	VARCHAR(50) UNIQUE NOT NULL,
 	mail 		VARCHAR(100) UNIQUE NOT NULL,
-	password	VARCHAR(50) UNIQUE NOT NULL
+	password	VARCHAR(500) NOT NULL
 );
 
 CREATE Table serie(
