@@ -45,6 +45,7 @@ public class Serie implements Serializable{
     private double map_zoom;
     @NotNull
     private int dist;
+    private String idutilisateur;
     
     @ManyToMany
     private Set<Photo> listePhotos = new HashSet<Photo>();
@@ -54,7 +55,7 @@ public class Serie implements Serializable{
         
     }
     
-    public Serie(String nom,String i, String v, double lat, double lon, double z, int d){
+    public Serie(String nom,String i, String v, double lat, double lon, double z, int d,String userid){
         this.id = i;
         this.nom=nom;
         this.ville = v;
@@ -62,7 +63,7 @@ public class Serie implements Serializable{
         this.map_longitude = lon;
         this.map_zoom = z;
         this.dist = d;
-        
+        this.idutilisateur=userid;
     }
 
     public String getId() {
@@ -125,6 +126,11 @@ public class Serie implements Serializable{
     public void setListePhotos(Set<Photo>p) {
         this.listePhotos = p;
     }
-
+    public String getUserId(){
+        return this.idutilisateur;
+    }
+    public void setUserId(String userid){
+        this.idutilisateur=userid;
+    }
     
 }

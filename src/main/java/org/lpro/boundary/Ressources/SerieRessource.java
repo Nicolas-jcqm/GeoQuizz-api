@@ -159,6 +159,35 @@ public class SerieRessource {
                         });
             return Response.ok(jab.build()).build();
     }
+    
+    @GET
+    @Path("admin")
+    public Response getSeriesAdmin(
+        @QueryParam("userid") String userId){
+         List<Serie> listSeries = this.sm.findSeriesByIdUser(userId);
+        return Response.ok(listToJson(listSeries,userId)).build();
+    }
+    
+    private JsonObject listToJson(List<Serie>l, String userId){
+        JsonArrayBuilder s = Json.createArrayBuilder();
+        JsonObject jsonuserid =Json.createObjectBuilder().add("userid",userId).build();
+        l.forEach((serie ->{
+            JsonObject pos = Json.createObjectBuilder()
+                .add("id",serie.getId())
+                .add("latitude",serie.getLatitude())
+                .add("longitude",serie.getLongitude())
+                .add("distance",serie.getDistance())
+                .add("ville",serie.getVille())
+                .add("zoom",serie.getZoom())
+                .build();
+        s.add(pos);
+        }));
+        return Json.createObjectBuilder()
+                .add("type", "ressource")
+                .add("userid", jsonuserid)
+                .add("seriesUser",s).build();
+      
+    }
 
     /**
 @POST
