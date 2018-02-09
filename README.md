@@ -9,6 +9,7 @@ Nicolas Jacquemin-Thibaud Grepin-Lucas Marquan-Quentin Parmentier
 			POST: /parties :crée une partie demande un Json contenant : « idSerie » « joueur » « nbPhotos » « id » « token » « status » « score » 
 			PUT: /parties modifie le score de la partie :  -token : String
 										          - Json score : « score »
+			PUT: /parties/status modifie le statut d'une partie : Json contenant : "token":String "estEnCours": boolean
 #### Series: 
 			GET: /series : retourne toutes les series
 			GET:/series/{id}/parties: retourne toutes les parties d’une série 
