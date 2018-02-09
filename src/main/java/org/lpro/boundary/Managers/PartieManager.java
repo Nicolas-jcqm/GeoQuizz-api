@@ -47,9 +47,11 @@ public class PartieManager {
         return q.getSingleResult();
     }
     public Partie createPartie(String idSerie, int nbPhotos, String idJoueur){
-        Partie p = new Partie(UUID.randomUUID().toString(), UUID.randomUUID().toString(), nbPhotos, true, 0, idJoueur, idSerie);
+       // Partie p = new Partie(UUID.randomUUID().toString(), UUID.randomUUID().toString(), nbPhotos, true, 0, idJoueur, idSerie);
+       Partie p= new Partie(UUID.randomUUID().toString(), UUID.randomUUID().toString(),nbPhotos,true,0,idJoueur,idSerie);
         this.save(p);
         return p;
+
     }
     public Partie create(Partie p){
         p.setId(UUID.randomUUID().toString());

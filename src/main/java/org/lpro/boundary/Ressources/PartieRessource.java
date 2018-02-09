@@ -111,16 +111,20 @@ public class PartieRessource {
     
     @POST
     public Response derniereChance(
-        JsonObject partie, @Context UriInfo uriInfo){
+        JsonObject partie, @Context UriInfo uriInfo){   
+        
         int photos = partie.getInt("photo");
         String joueur = partie.getString("joueur");
         String serie = partie.getString("serie");
         Partie p = this.pm.createPartie(serie, photos, joueur);
         List<Photo> returnPhotos = this.sm.randomPhotos(this.sm.findById(serie), photos);
         return Response.ok(listToJson(returnPhotos,p)).build();
+     
+        
     }
     
     private JsonObject listToJson(List<Photo> l,Partie p){
+        
         JsonArrayBuilder photos=Json.createArrayBuilder();
         JsonObject token=Json.createObjectBuilder().add("token",p.getToken()).build();
         l.forEach((photo ->{
@@ -136,6 +140,7 @@ public class PartieRessource {
                 .add("type", "ressource")
                 .add("partie", token)
                 .add("photos",photos).build();
+      
     }
     
     

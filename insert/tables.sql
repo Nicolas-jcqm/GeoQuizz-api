@@ -23,7 +23,6 @@ CREATE Table partie(
 	score 		INTEGER NOT NULL,
 	idJoueur 	VARCHAR(100),
 	idSerie 	VARCHAR(100) NOT NULL,
-	CONSTRAINT joueur_fk FOREIGN KEY(idJoueur) REFERENCES Utilisateur(id),
 	CONSTRAINT serie_fk FOREIGN KEY(idSerie) REFERENCES Serie(id)
 );
 	

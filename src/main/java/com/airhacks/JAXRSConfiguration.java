@@ -13,12 +13,18 @@ import javax.ws.rs.core.Application;
  */
 @ApplicationPath("api")
 public class JAXRSConfiguration extends Application {
-    /**    @Override
+    
+    @Override
     public Set<Class<?>> getClasses(){
         Set<Class<?>> classes = new HashSet<>();
         classes.add(org.lpro.provider.CORSResponseFilter.class);
+        classes.add(org.lpro.provider.CORSRequestFilter.class);
+        classes.add(org.lpro.boundary.SigninBoundary.class);
+        classes.add(org.lpro.boundary.InscriptionBoundary.class);
+        classes.add(org.lpro.boundary.Ressources.SerieRessource.class);
+        classes.add(org.lpro.boundary.Ressources.PartieRessource.class);
         return classes;
-    } */
+    } 
     
 
 }
