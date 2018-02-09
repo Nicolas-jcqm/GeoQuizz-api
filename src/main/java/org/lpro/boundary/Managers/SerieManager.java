@@ -55,6 +55,11 @@ public class SerieManager {
         s.setListePhotos(p);
         return this.em.merge(s);
     }
+    
+    public Serie save(Serie s){
+        s.setId(UUID.randomUUID().toString());
+        return this.em.merge(s);
+    }
   /*
     public List<Photo> randomPhotos(Serie s,int nbPhotos){
         List<Integer> i = new ArrayList<>();

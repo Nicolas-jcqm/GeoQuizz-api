@@ -6,9 +6,15 @@
 package org.lpro.boundary.Ressources;
 
 import io.swagger.annotations.Api;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import javax.ejb.Stateless;
@@ -17,6 +23,7 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.persistence.Query;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -28,8 +35,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import static jdk.nashorn.tools.ShellFunctions.input;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.lpro.boundary.Managers.PartieManager;
 import org.lpro.boundary.Managers.PhotoManager;
 import org.lpro.boundary.Managers.SerieManager;
@@ -57,6 +68,9 @@ public class SerieRessource {
 
     @Inject
     PhotoManager phm;
+    
+    @Context
+    UriInfo uriInfo;
 
     @GET
     public Response getSeries() {
@@ -200,7 +214,7 @@ public class SerieRessource {
      public Response ajouterSerie(@Valid Serie serie)
      {
          serie.setId(UUID.randomUUID().toString());
-         serieResource.save(serie);
+         sm.save(serie);
          URI uri = uriInfo.getBaseUriBuilder().path("series/" + serie.getId()).build();
          return Response.created(uri).build();
      }
@@ -212,8 +226,8 @@ public class SerieRessource {
   @Produces(MediaType.APPLICATION_JSON)
   public Response addPhotoToSerie(@PathParam("id") String id,
                                   @DefaultValue("") @QueryParam("desc") String desc,
-                                  @DefaultValue("") @QueryParam("latitude") String latitude,
-                                  @DefaultValue("") @QueryParam("longitude") String longitude,
+                                  @DefaultValue("") @QueryParam("latitude") double latitude,
+                                  @DefaultValue("") @QueryParam("longitude") double longitude,
                                   MultipartFormDataInput input)
   {
       Serie serie = sm.findById(id);
@@ -230,7 +244,7 @@ public class SerieRessource {
           try
           {
               InputStream is = ip.getBody(InputStream.class,null);
-              byte[] bytes = SerieRepresentation.byteArray(is);
+              byte[] bytes = byteArray(is);
               ecrireImage(bytes,"/opt/jboss/wildfly/standalone/tmp/"+filename);
               photo.setUrl("/opt/jboss/wildfly/standalone/tmp/"+filename);
           }
@@ -239,16 +253,16 @@ public class SerieRessource {
               ioe.printStackTrace();
           }
       }
-      photo.setId("";
-      photo.setDescription(desc);
+      photo.setId("");
+      photo.setDescr(desc);
       photo.setLatitude(latitude);
       photo.setLongitude(longitude);
-      photo.setIdSerie(serie.getId());
+      photo.setSerie(serie.getId());
       phm.save(photo);
       URI uri = uriInfo.getBaseUriBuilder().path("series/" + serie.getId()).build();
       return Response.status(200).location(uri).build();
   }
-  public static byte[] byteArray(InputStream is) throws IOException
+  private static byte[] byteArray(InputStream is) throws IOException
   {
       ByteArrayOutputStream output = new ByteArrayOutputStream();
       try
