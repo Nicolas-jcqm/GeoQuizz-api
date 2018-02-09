@@ -48,16 +48,16 @@ import org.lpro.entity.Serie;
 @Consumes(MediaType.APPLICATION_JSON)
 @Api(value="Serie")
 public class SerieRessource {
-    
-    @Inject 
+
+    @Inject
     SerieManager sm;
-    
-    @Inject 
+
+    @Inject
     PartieManager pm;
-    
-    @Inject 
+
+    @Inject
     PhotoManager phm;
-    
+
     @GET
     public Response getSeries() {
         List<Serie> liste =this.sm.findAll();
@@ -92,8 +92,8 @@ public class SerieRessource {
                  System.out.println("erreur");
                  return Response.status(Response.Status.NOT_FOUND).entity(Json.createObjectBuilder().add("error","mauvais idSerie")).build();
             }
-             
-    }       
+
+    }
    private JsonObject toJsonPartie(Serie s, List<Partie> p){
         JsonArrayBuilder parties = Json.createArrayBuilder();
         p.forEach((partie)->{
@@ -106,21 +106,21 @@ public class SerieRessource {
 
             parties.add(gam);
         });
-        
+
         return Json.createObjectBuilder()
                 .add("type", "collection")
                 .add("parties", parties)
                 .build();
     }
-    
-   
+
+
     @GET
     @Path("{id}")
     public Response getOneSerie(
         @PathParam("id") String id, @Context UriInfo uriInfo ){
         Serie s=sm.findById(id);
          return Response.ok(serieToJson(s)).build();
-    }   
+    }
     private JsonObject serieToJson(Serie s){
          return Json.createObjectBuilder()
                 .add("nom",s.getNom())
@@ -145,7 +145,7 @@ public class SerieRessource {
                         });
             return Response.ok(jab.build()).build();
     }
-    
+
     /**
 @POST
     @Path("/{postId}/tags")
@@ -160,9 +160,9 @@ public class SerieRessource {
     }
 
      */
-    
-    
-    
+
+
+
     private JsonObject toJson(Photo e){
         JsonObject json= Json.createObjectBuilder()
                 .add("descr",e.getDescr())
@@ -182,16 +182,113 @@ public class SerieRessource {
             @DefaultValue("10") @QueryParam("zoom") double zoom,
             @DefaultValue("500") @QueryParam("diffDist") int diffDist,
             @QueryParam("nom")String nom){
-        
+
         Serie s = new Serie(nom,UUID.randomUUID().toString(), ville, latitude, longitude, zoom, diffDist);
        Serie newSerie = this.sm.save(s,);
-        
+
         JsonObject succes = Json.createObjectBuilder()
-                .add("success", "La série a été crée")
+                .add("success", "La sï¿½rie a ï¿½tï¿½ crï¿½e")
                 .build();
         URI uri = uriInfo.getAbsolutePathBuilder().path("/"+newSerie.getId()).build();
         return Response.created(uri).entity(succes).build();
     }
     * */
-   
+
+     @POST
+     @Produces(MediaType.APPLICATION_JSON)
+     @Consumes(MediaType.APPLICATION_JSON)
+     public Response ajouterSerie(@Valid Serie serie)
+     {
+         serie.setId(UUID.randomUUID().toString());
+         serieResource.save(serie);
+         URI uri = uriInfo.getBaseUriBuilder().path("series/" + serie.getId()).build();
+         return Response.created(uri).build();
+     }
+
+
+  @POST
+  @Path("{id}")
+  @Consumes(MediaType.MULTIPART_FORM_DATA)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response addPhotoToSerie(@PathParam("id") String id,
+                                  @DefaultValue("") @QueryParam("desc") String desc,
+                                  @DefaultValue("") @QueryParam("latitude") String latitude,
+                                  @DefaultValue("") @QueryParam("longitude") String longitude,
+                                  MultipartFormDataInput input)
+  {
+      Serie serie = sm.findById(id);
+      if(serie == null){
+        return Response.status(Response.Status.NOT_FOUND).build();
+      }
+      Map<String, List<InputPart>> formulaire = input.getFormDataMap();
+      List<InputPart> inputParts = formulaire.get("file");
+      Photo photo = new Photo();
+      for (InputPart ip : inputParts)
+      {
+          MultivaluedMap<String, String> headers = ip.getHeaders();
+          String filename = getNomImage(headers);
+          try
+          {
+              InputStream is = ip.getBody(InputStream.class,null);
+              byte[] bytes = SerieRepresentation.byteArray(is);
+              ecrireImage(bytes,"/opt/jboss/wildfly/standalone/tmp/"+filename);
+              photo.setUrl("/opt/jboss/wildfly/standalone/tmp/"+filename);
+          }
+          catch (IOException ioe)
+          {
+              ioe.printStackTrace();
+          }
+      }
+      photo.setId("";
+      photo.setDescription(desc);
+      photo.setLatitude(latitude);
+      photo.setLongitude(longitude);
+      photo.setIdSerie(serie.getId());
+      phm.save(photo);
+      URI uri = uriInfo.getBaseUriBuilder().path("series/" + serie.getId()).build();
+      return Response.status(200).location(uri).build();
+  }
+  public static byte[] byteArray(InputStream is) throws IOException
+  {
+      ByteArrayOutputStream output = new ByteArrayOutputStream();
+      try
+      {
+          byte[] b = new byte[4096];
+          int n = 0;
+          while ((n = is.read(b)) != -1)
+          {
+              output.write(b, 0, n);
+          }
+          return output.toByteArray();
+      }
+      finally
+      {
+          output.close();
+      }
+  }
+
+  private void ecrireImage(byte[] contenu, String filename) throws IOException
+  {
+      File file = new File(filename);
+
+      FileOutputStream fop = new FileOutputStream(file);
+
+      fop.write(contenu);
+      fop.flush();
+      fop.close();
+  }
+
+  private String getNomImage(MultivaluedMap<String, String> headers)
+  {
+      String[] contenuHeader = headers.getFirst("Content-Disposition").split(";");
+
+      for (String filename : contenuHeader) {
+          if ((filename.trim().startsWith("filename"))) {
+              String[] name = filename.split("=");
+              return name[1].trim().replaceAll("\"", "");
+          }
+      }
+
+      return "inconnu";
+  }
 }
