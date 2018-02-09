@@ -6,9 +6,16 @@
 package org.lpro.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,18 +33,30 @@ public class Serie implements Serializable{
     
     @Id
     private String id;
+    @NotNull
+    private String nom;
+    @NotNull
     private String ville;
+    @NotNull
     private double map_latitude;
+    @NotNull
     private double map_longitude;
+    @NotNull
     private double map_zoom;
+    @NotNull
     private int dist;
     
+    @ManyToMany
+    private Set<Photo> listePhotos = new HashSet<Photo>();
+
+            
     public Serie(){
         
     }
     
-    public Serie(String i, String v, double lat, double lon, double z, int d){
+    public Serie(String nom,String i, String v, double lat, double lon, double z, int d){
         this.id = i;
+        this.nom=nom;
         this.ville = v;
         this.map_latitude = lat;
         this.map_longitude = lon;
@@ -93,4 +112,19 @@ public class Serie implements Serializable{
     public void setDistance(int d) {
         this.dist = d;
     }
+    public String getNom(){
+        return this.nom;
+    }
+    public void setNom(String n){
+        this.nom=n;
+    }
+    public Set<Photo> getListePhotos() {
+        return this.listePhotos;
+    }
+    
+    public void setListePhotos(Set<Photo>p) {
+        this.listePhotos = p;
+    }
+
+    
 }

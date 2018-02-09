@@ -1,8 +1,8 @@
 INSERT INTO utilisateur (id, username, mail, password) VALUES
 (1, 'MrRobot', 'loremIpsum@gmail.com', 'password');
 
-INSERT INTO serie (id, ville, map_latitude, map_longitude, map_zoom, dist) VALUES
-(1, 'Nancy', 48.66686499999999, 6.134240999999999, 10, 500);
+INSERT INTO serie (id, nom, ville, map_latitude, map_longitude, map_zoom, dist) VALUES
+(1, 'serie1', 'Nancy', 48.66686499999999, 6.134240999999999, 10, 500);
 
 INSERT INTO partie (id, token, nb_photos, status, score, idJoueur, idSerie) VALUES
 (1, 'jnfskfd466dg4dg4f', 10, true, 12, 1, 1);
@@ -19,3 +19,14 @@ INSERT INTO photo (id, descr, position_latitude, position_longitude, url, idSeri
 (9, 'Musee des Beaux-Arts', 48.693630, 6.182112, 'Nancy/museeBeauxArts.jpg', 1),
 (10, 'Centre Commercial Saint Sebeastien', 48.688876, 6.181254, 'Nancy/saintSebastien.jpg', 1);
 
+INSERT INTO serie_photo (listeserie_id, listephotos_id) VALUES
+(1,1),
+(1,2),
+(1,3),
+(1,4),
+(1,5),
+(1,6),
+(1,7),
+(1,8),
+(1,9),
+(1,10);
