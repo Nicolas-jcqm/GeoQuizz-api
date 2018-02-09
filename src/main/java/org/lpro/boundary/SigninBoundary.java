@@ -34,7 +34,8 @@ public class SigninBoundary {
   UriInfo uriInfo;
 
   @POST
-  public Response signinUtilisateur(JsonObject u){
+  public Response signinUtilisateur(
+          JsonObject u, @Context UriInfo uriInfo){
     if(u.getString("mail") == null || u.getString("password") == null ){
       return Response.status(Response.Status.UNAUTHORIZED).entity(
                     Json.createObjectBuilder()
@@ -44,7 +45,6 @@ public class SigninBoundary {
     }else{
       String mail=u.getString("mail");
       String password=u.getString("password");
-      password=PasswordManagement.digestPassword(password);
       Utilisateur utilisateur=this.um.findUtilisateur(mail);
       if(utilisateur == null){
         return Response.status(Response.Status.UNAUTHORIZED).entity(
@@ -63,10 +63,6 @@ public class SigninBoundary {
     }
 
   }
-
-
-
-
 
   private String signinToken(String mail){
      Key key = km.generateKey();
