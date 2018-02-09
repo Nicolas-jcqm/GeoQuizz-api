@@ -1,3 +1,9 @@
+DROP TABLE serie_photo;
+DROP TABLE photo; 
+DROP TABLE partie;
+DROP TABLE serie;
+DROP TABLE utilisateur;
+
 CREATE Table utilisateur(
 	id			VARCHAR(50) PRIMARY KEY UNIQUE NOT NULL,
 	username	VARCHAR(50) UNIQUE NOT NULL,
