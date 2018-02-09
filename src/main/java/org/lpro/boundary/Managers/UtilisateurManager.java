@@ -40,6 +40,36 @@ public class UtilisateurManager {
         
         return u;
     }
+    
+    public Utilisateur findUtilisateurById(String id){
+         Utilisateur u = null;
+       
+        TypedQuery<Utilisateur> q=this.em.createQuery("SELECT u FROM Utilisateur u where u.id = :id",Utilisateur.class);
+        q.setParameter("id",id);
+      
+        try{
+            u=q.getSingleResult();
+        }catch(NoResultException e){
+            u=null;
+        }
+        
+        return u;
+    }
+    
+    public Utilisateur findUtilisateurByToken(String token){
+         Utilisateur u = null;
+       
+        TypedQuery<Utilisateur> q=this.em.createQuery("SELECT u FROM Utilisateur u where u.token = :token",Utilisateur.class);
+        q.setParameter("token",token);
+      
+        try{
+            u=q.getSingleResult();
+        }catch(NoResultException e){
+            u=null;
+        }
+        
+        return u;
+    }
 
     public Utilisateur signup(String username, String mail, String password) {
         Utilisateur u = new Utilisateur(UUID.randomUUID().toString(), username, mail, PasswordManagement.digestPassword(password));

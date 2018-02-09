@@ -17,6 +17,7 @@ import javax.persistence.CacheStoreMode;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import org.lpro.entity.Photo;
@@ -85,5 +86,10 @@ public class SerieManager {
             photosRes.add( lol.get(i));
         }
         return photosRes;
+    }
+
+    public List<Serie> findSeriesByIdUser(String userId) {
+        TypedQuery<Serie> q=em.createQuery("SELECT s FROM Serie s WHERE s.idutilisateur='"+userId+"'",Serie.class);
+        return q.getResultList();   
     }
 }

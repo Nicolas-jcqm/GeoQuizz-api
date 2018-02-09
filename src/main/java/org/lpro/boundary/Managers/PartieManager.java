@@ -86,4 +86,9 @@ public class PartieManager {
         return this.em.merge(p);
     }
     
+    public Partie updateStatus(Partie p, boolean  status){
+        p.setStatus(status);
+        return this.em.merge(p);
+    }
+    
 }

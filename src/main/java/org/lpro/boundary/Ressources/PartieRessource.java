@@ -145,6 +145,7 @@ public class PartieRessource {
     
     
     @PUT
+   @Path("{/score}")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "Creer"),
         @ApiResponse(code = 417, message = "Expectation failed"),
@@ -194,6 +195,30 @@ public class PartieRessource {
         URI uri = uriInfo.getAbsolutePathBuilder().path("/"+p.getId()).build();
         return Response.created(uri).entity(succes).build();
        
+    }
+    
+    @PUT 
+    @Path("{/status}")
+    @ApiResponses(value = {
+        @ApiResponse(code = 201, message = "Creer"),
+        @ApiResponse(code = 417, message = "Expectation failed"),
+        @ApiResponse(code = 500, message = "Erreur Serveur")})
+    public Response miseJourStatus(
+        JsonObject statusToken, @Context UriInfo uriInfo){
+        
+        boolean status = statusToken.getBoolean("estEnCours");
+        String token = statusToken.getString("token");
+        
+        Partie p = this.pm.findByToken(token);
+        
+        p = this.pm.updateStatus(p, status);
+        
+        JsonObject succes = Json.createObjectBuilder()
+                .add("success", "Score sauvegarder")
+                .build();
+        
+        URI uri = uriInfo.getAbsolutePathBuilder().path("/"+p.getId()).build();
+        return Response.created(uri).entity(succes).build();
     }
     
     private JsonObject builJson(Serie s, Partie g, List<Photo> p){

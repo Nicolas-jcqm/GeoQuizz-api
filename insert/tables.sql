@@ -18,7 +18,9 @@ CREATE Table serie(
 	map_latitude 	DOUBLE PRECISION NOT NULL,
 	map_longitude 	DOUBLE PRECISION NOT NULL,
 	map_zoom 		DOUBLE PRECISION NOT NULL,
-	dist 			INTEGER NOT NULL 
+	dist 			INTEGER NOT NULL,
+	idUtilisateur	VARCHAR(500) NOT NULL,
+	CONSTRAINT utilisateur_fk FOREIGN KEY(idUtilisateur) REFERENCES utilisateur(id)
 );
 
 CREATE Table partie(
