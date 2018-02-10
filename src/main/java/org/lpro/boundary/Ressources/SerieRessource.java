@@ -21,6 +21,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
+import javax.json.JsonNumber;
 import javax.json.JsonObject;
 import javax.persistence.Query;
 import javax.validation.Valid;
@@ -237,7 +238,7 @@ public class SerieRessource {
         return Response.created(uri).entity(succes).build();
     }
     * */
-
+/**
      @POST
      @Produces(MediaType.APPLICATION_JSON)
      @Consumes(MediaType.APPLICATION_JSON)
@@ -247,7 +248,31 @@ public class SerieRessource {
          sm.save(serie);
          URI uri = uriInfo.getBaseUriBuilder().path("series/" + serie.getId()).build();
          return Response.created(uri).build();
-     }
+     }*/
+     
+    @POST
+    public Response ajouterSerie(
+        JsonObject serie, @Context UriInfo uriInfo){
+        
+        String nom = serie.getString("nom");
+        String ville = serie.getString("ville");
+        JsonNumber la = serie.getJsonNumber("latitude");
+        JsonNumber lo = serie.getJsonNumber("longitude");
+        JsonNumber zoom = serie.getJsonNumber("zoom");
+        int dist = serie.getInt("distance");
+        String idUtilisateur = serie.getString("userid");
+        
+        double lat = la.doubleValue();
+        double lon = lo.doubleValue();
+        double z = zoom.doubleValue();
+
+       Serie s = new Serie(nom, "id", ville, lat, lon, z, dist, idUtilisateur);
+        
+        this.sm.save(s);
+        
+        return Response.ok().build();
+    }
+     
 
 
   @POST
