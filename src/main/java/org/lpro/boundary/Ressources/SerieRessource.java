@@ -174,6 +174,7 @@ public class SerieRessource {
         l.forEach((serie ->{
             JsonObject pos = Json.createObjectBuilder()
                 .add("id",serie.getId())
+                 .add("nom",serie.getNom())
                 .add("latitude",serie.getLatitude())
                 .add("longitude",serie.getLongitude())
                 .add("distance",serie.getDistance())

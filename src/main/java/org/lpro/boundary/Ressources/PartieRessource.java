@@ -145,7 +145,7 @@ public class PartieRessource {
     
     
     @PUT
-   @Path("{/score}")
+   @Path("score")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "Creer"),
         @ApiResponse(code = 417, message = "Expectation failed"),
@@ -198,7 +198,7 @@ public class PartieRessource {
     }
     
     @PUT 
-    @Path("{/status}")
+    @Path("status")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "Creer"),
         @ApiResponse(code = 417, message = "Expectation failed"),
@@ -214,11 +214,12 @@ public class PartieRessource {
         p = this.pm.updateStatus(p, status);
         
         JsonObject succes = Json.createObjectBuilder()
-                .add("success", "Score sauvegarder")
+                .add("success", "status sauvegarder")
                 .build();
         
         URI uri = uriInfo.getAbsolutePathBuilder().path("/"+p.getId()).build();
         return Response.created(uri).entity(succes).build();
+
     }
     
     private JsonObject builJson(Serie s, Partie g, List<Photo> p){
